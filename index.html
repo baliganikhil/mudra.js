@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Mudra.js by baliganikhil</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Mudra.js</h1>
+          <h2>mudra.js is an Authentication &amp; Authorisation system in NodeJS</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/baliganikhil/mudra.js/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/baliganikhil/mudra.js/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/baliganikhil/mudra.js" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="mudrajs" class="anchor" href="#mudrajs"><span class="octicon octicon-link"></span></a>mudra.js</h1>
+
+<p>Mudra is a simple authentication and authorisation library for NodeJS that uses MongoDB for storing credentials.</p>
+
+<h3>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h3>
+
+<pre><code>npm install mudra
+</code></pre>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<pre><code>var mudra = require('mudra');
+</code></pre>
+
+<p><strong>Mudra functions support both callbacks and promises using Q</strong></p>
+
+<hr><h3>
+<a name="authentication" class="anchor" href="#authentication"><span class="octicon octicon-link"></span></a>Authentication</h3>
+
+<h4>
+<a name="register-account" class="anchor" href="#register-account"><span class="octicon octicon-link"></span></a>Register account</h4>
+
+<p>Example using Callback</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span><span class="nx">username</span><span class="o">:</span> <span class="s1">'bill.gates@microsoft.com'</span><span class="p">,</span> <span class="nx">password</span><span class="o">:</span> <span class="s1">'microsoft'</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">'Bill Gates'</span><span class="p">};</span>
+<span class="nx">mudra</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>Example using promises</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span><span class="nx">username</span><span class="o">:</span> <span class="s1">'bill.gates@microsoft.com'</span><span class="p">,</span> <span class="nx">password</span><span class="o">:</span> <span class="s1">'microsoft'</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">'Bill Gates'</span><span class="p">};</span>
+<span class="nx">mudra</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">params</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">success</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">success</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'success: '</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">error</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+   <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">'Error: '</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>
+<a name="login" class="anchor" href="#login"><span class="octicon octicon-link"></span></a>Login</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span><span class="nx">username</span><span class="o">:</span> <span class="s1">'bill.gates@microsoft.com'</span><span class="p">,</span> <span class="nx">password</span><span class="o">:</span> <span class="s1">'microsoft'</span><span class="p">};</span>
+<span class="nx">mudra</span><span class="p">.</span><span class="nx">login</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="authenticate" class="anchor" href="#authenticate"><span class="octicon octicon-link"></span></a>Authenticate</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span><span class="nx">username</span><span class="o">:</span> <span class="s1">'bill.gates@microsoft.com'</span><span class="p">,</span> <span class="nx">hash</span><span class="o">:</span> <span class="s1">'$2a$08$4Y7NNgKwZavoT8B.xy6RyuZPXOpxsitDNjq9nSlApRFh/ZAVL3WV2'</span><span class="p">};</span>
+<span class="nx">mudra</span><span class="p">.</span><span class="nx">authenticate</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<hr><h3>
+<a name="authorisation" class="anchor" href="#authorisation"><span class="octicon octicon-link"></span></a>Authorisation</h3>
+
+<h4>
+<a name="create-role" class="anchor" href="#create-role"><span class="octicon octicon-link"></span></a>Create Role</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span><span class="nx">role</span><span class="o">:</span> <span class="s1">'admin'</span><span class="p">};</span>
+<span class="nx">mudra</span><span class="p">.</span><span class="nx">create_role</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="update-role-add-or-remove-members" class="anchor" href="#update-role-add-or-remove-members"><span class="octicon octicon-link"></span></a>Update Role (add or remove members)</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span><span class="nx">role</span><span class="o">:</span> <span class="s1">'admin'</span><span class="p">,</span> <span class="nx">users</span><span class="o">:</span> <span class="p">[{</span><span class="nx">username</span><span class="o">:</span> <span class="s1">'bill.gates@microsoft'</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">'Bill Gates'</span><span class="p">}]};</span>
+<span class="nx">mudra</span><span class="p">.</span><span class="nx">update_roles</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="create-permission" class="anchor" href="#create-permission"><span class="octicon octicon-link"></span></a>Create Permission</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span><span class="nx">permission</span><span class="o">:</span> <span class="s1">'cancel_order'</span><span class="p">};</span>
+<span class="nx">mudra</span><span class="p">.</span><span class="nx">create_permission</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="update-permission-add-or-remove-roles" class="anchor" href="#update-permission-add-or-remove-roles"><span class="octicon octicon-link"></span></a>Update Permission (add or remove roles)</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span><span class="nx">permission</span><span class="o">:</span> <span class="s1">'cancel_order'</span><span class="p">,</span> <span class="nx">roles</span><span class="o">:</span> <span class="p">[</span><span class="s1">'admin'</span><span class="p">]};</span>
+<span class="nx">mudra</span><span class="p">.</span><span class="nx">update_permission</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="check-if-user-has-permission" class="anchor" href="#check-if-user-has-permission"><span class="octicon octicon-link"></span></a>Check if user has permission</h4>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span><span class="nx">username</span><span class="o">:</span> <span class="s1">'bill.gates@microsoft.com'</span><span class="p">,</span> <span class="nx">hash</span><span class="o">:</span> <span class="s1">'$2a$08$4Y7NNgKwZavoT8B.xy6RyuZPXOpxsitDNjq9nSlApRFh/ZAVL3WV2'</span><span class="p">,</span> <span class="nx">permission</span><span class="o">:</span> <span class="s1">'cancel_order'</span><span class="p">};</span>
+<span class="nx">mudra</span><span class="p">.</span><span class="nx">check_permission</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+        </section>
+
+        <footer>
+          Mudra.js is maintained by <a href="https://github.com/baliganikhil">baliganikhil</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>

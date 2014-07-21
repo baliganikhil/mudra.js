@@ -18,8 +18,16 @@ var Role = mongoose.Schema({
 			}]
 });
 
+var Permission = mongoose.Schema({
+	permission: {type: String, required: true, index: {unique: true}},
+	roles: [{
+				role: {type: String, required: true, index: {unique: true}},
+			}]
+});
+
 User = mongoose.model('User', User);
 Role = mongoose.model('Role', Role);
+Permission = mongoose.model('Permission', Permission);
 
 exports.register = function(payload, callback) {
 	var deferred = Q.defer();
@@ -159,6 +167,27 @@ exports.create_role = function(params, callback) {
 	return deferred.promise;
 };
 
+exports.create_permission = function(params, callback) {
+	var deferred = Q.defer();
+
+	if (noe(callback)) {
+		callback = function() {};
+	}
+
+	(new Permission(params)).save(function(err, doc) {
+        if (err) {
+        	return_error(err, deferred, callback);
+        	return false;
+        }
+
+        var payload = {status: 'success', data: doc};
+        deferred.resolve(payload);
+        callback(payload);
+	});
+
+	return deferred.promise;
+};
+
 exports.update_role = function(params, callback) {
 	var deferred = Q.defer();
 
@@ -198,6 +227,45 @@ exports.update_role = function(params, callback) {
 	return deferred.promise;
 };
 
+exports.update_permission = function(params, callback) {
+	var deferred = Q.defer();
+
+	if (noe(callback)) {
+		callback = function() {};
+	}
+
+	var permission = params.permission;
+
+	Permission.findOne({permission: permission}, function(err, permission) {
+		if (err) {
+        	return_error(err, deferred, callback);
+        	return false;
+        }
+
+        if (noe(permission)) {
+			return_error('No such permission found', deferred, callback);
+			return;
+		}
+
+		permission = JSON.parse(JSON.stringify(permission));
+        permission.roles = params.roles;
+        delete permission._id;
+
+        Permission.findOneAndUpdate({permission: permission.permission}, permission, function(err) {
+	        if (err) {
+	        	return_error(err, deferred, callback);
+	        	return false;
+	        }
+
+        	var payload = {status: 'success', data: permission};
+	        deferred.resolve(payload);
+	        callback(payload);
+        });
+	});
+
+	return deferred.promise;
+};
+
 function create_auth_token(username, password) {
 	var deferred = Q.defer();
 
@@ -223,7 +291,7 @@ function noe(i) {
 	return [undefined, null, ''].indexOf(i) > -1;
 }
 
-exports.update_role({role: 'admin', users: [{username: 'nikhil.baliga@zovi.com', name: 'Nikhil'}]}).
+exports.update_permission({permission: 'cancel_order', roles: [{role: 'admin'}]}).
 then(
 		function(d) {console.log(d)},
 		function(err) {console.log(err)}

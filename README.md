@@ -4,14 +4,14 @@ mudra.js
 Mudra is a simple authentication and authorisation library for NodeJS that uses MongoDB for storing credentials.
 
 ###Installation
-`
+```
 npm install mudra
-`
+```
 
 ##Usage
-`
+```
 var mudra = require('mudra');
-`
+```
 
 **Mudra functions support both callbacks and promises using Q**
 

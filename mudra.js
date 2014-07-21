@@ -341,9 +341,3 @@ function return_error(err, deferred, callback) {
 function noe(i) {
 	return [undefined, null, ''].indexOf(i) > -1;
 }
-
-exports.check_permission({permission: 'cancel_order', username: 'nikhil.baliga@zovi.com', hash: '$2a$08$4Y7NNgKwZavoT8B.xy6RyuZPXOpxsitDNjq9nSlApRFh/ZAVL3WV2'}).
-then(
-		function(d) {console.log(d)},
-		function(err) {console.log(err)}
-	);

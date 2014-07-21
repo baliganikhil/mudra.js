@@ -266,6 +266,57 @@ exports.update_permission = function(params, callback) {
 	return deferred.promise;
 };
 
+exports.check_permission = function(params, callback) {
+	var deferred = Q.defer();
+
+	if (noe(callback)) {
+		callback = function() {};
+	}
+
+	exports.authenticate(params).then(
+		function() {
+			var permission = params.permission;
+			var username = params.username;
+
+			Role.find({"users.username": username}, {role: 1, _id: 0}, function(err, docs) {
+		        if (err) {
+		        	return_error(err, deferred, callback);
+		        	return false;
+		        }
+
+		        var roles = [];
+		        docs.forEach(function(role) {
+		        	roles.push(role.role);
+		        });
+
+				Permission.findOne({permission: permission, "roles.role": {'$in': roles}}, function(err, doc) {
+			        if (err) {
+			        	return_error(err, deferred, callback);
+			        	return false;
+			        }
+
+			        if (doc === null) {
+			        	return_error('Unauthorised', deferred, callback);
+			        	return;
+			        }
+
+			        var payload = {status: 'success', data: 'Authorised'};
+			        deferred.resolve(payload);
+			        callback(payload);
+
+
+				});
+			});
+
+		},
+
+		function(err) {
+	       	return_error(err, deferred, callback);
+		});
+
+	return deferred.promise;
+};
+
 function create_auth_token(username, password) {
 	var deferred = Q.defer();
 
@@ -291,7 +342,7 @@ function noe(i) {
 	return [undefined, null, ''].indexOf(i) > -1;
 }
 
-exports.update_permission({permission: 'cancel_order', roles: [{role: 'admin'}]}).
+exports.check_permission({permission: 'cancel_order', username: 'nikhil.baliga@zovi.com', hash: '$2a$08$4Y7NNgKwZavoT8B.xy6RyuZPXOpxsitDNjq9nSlApRFh/ZAVL3WV2'}).
 then(
 		function(d) {console.log(d)},
 		function(err) {console.log(err)}

@@ -3,8 +3,8 @@
   "mongoose": "*",
   "q": "*",
   "name": "mudra",
-  "description": "mudra.js ========",
-  "version": "0.0.0",
+  "description": "Mudra is a simple authentication and authorisation library for NodeJS that uses MongoDB for storing credentials. (Full Info: https://github.com/baliganikhil/mudra.js)",
+  "version": "0.1.0",
   "main": "mudra.js",
   "dependencies": {
     "mongoose": "^3.8.13",

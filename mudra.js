@@ -2,7 +2,23 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var Q = require('q');
 
-mongoose.connect('mongodb://localhost/mudra');
+var fs = require('fs');
+
+var connection = 'mongodb://localhost/mudra';
+try {
+	var config = fs.readFileSync('./config.local');
+	config = JSON.parse(config);
+
+	var host = config.mongo.host;
+	var db = config.mongo.db;
+
+	connection = ['mongodb:/', host, db].join('/');
+
+} catch(e) {
+
+}
+
+mongoose.connect(connection);
 
 var User = mongoose.Schema({
 	username: {type: String, required: true, index: {unique: true}},

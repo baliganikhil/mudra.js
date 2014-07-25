@@ -20,30 +20,40 @@ try {
 
 mongoose.connect(connection);
 
+/************************************/
 var User = mongoose.Schema({
 	username: {type: String, required: true, index: {unique: true}},
 	name: String,
 	hash: {type: String, required: true}
 });
 
-var Role = mongoose.Schema({
-	role: {type: String, required: true, index: {unique: true}},
-	users: [{
+var _users = {
 				username: {type: String, required: true, index: {unique: true}},
 				name: String
-			}]
+			};
+
+var Role = mongoose.Schema({
+	role: {type: String, required: true, index: {unique: true}},
+	users: [_users]
+});
+
+var Context = mongoose.Schema({
+	context: {type: String, required: true},
+	users: [_users]
 });
 
 var Permission = mongoose.Schema({
 	permission: {type: String, required: true, index: {unique: true}},
 	roles: [{
 				role: {type: String, required: true, index: {unique: true}},
-			}]
+			}],
+	context: [Context]
 });
 
 User = mongoose.model('User', User);
 Role = mongoose.model('Role', Role);
 Permission = mongoose.model('Permission', Permission);
+/************************************/
 
 exports.register = function(payload, callback) {
 	var deferred = Q.defer();
@@ -292,7 +302,10 @@ exports.check_permission = function(params, callback) {
 	exports.authenticate(params).then(
 		function() {
 			var permission = params.permission;
+			var context = params.context;
 			var username = params.username;
+
+			console.log(context);
 
 			Role.find({"users.username": username}, {role: 1, _id: 0}, function(err, docs) {
 		        if (err) {
@@ -305,7 +318,7 @@ exports.check_permission = function(params, callback) {
 		        	roles.push(role.role);
 		        });
 
-				Permission.findOne({permission: permission, "roles.role": {'$in': roles}}, function(err, doc) {
+				Permission.findOne({permission: permission, '$or': [{"roles.role": {'$in': roles}}, {"context.roles": {"$in": roles}, "context.context": context}]}, function(err, doc) {
 			        if (err) {
 			        	return_error(err, deferred, callback);
 			        	return false;

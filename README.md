@@ -97,3 +97,28 @@ mudra.check_permission(params, function(callback) {
    console.log(response);
 });
 ```
+###Contexts
+For example, a project might require readonly privileges given to a certain group but edit privileges given to another group. Admins might get all privileges. You can add permissions by using contexts as follows
+```javascript
+var params = {
+                "permission": "important_project",
+                "roles": [
+                    "admin"
+                ],
+                "context": [
+                    {
+                        "read": [
+                            "read_group",
+                            "edit_group"
+                        ],
+                        "edit": [
+                            "edit_group"
+                        ]
+                    }
+                ]
+            };
+
+mudra.update_permission(params, function(callback) {
+   console.log(response);
+});
+```

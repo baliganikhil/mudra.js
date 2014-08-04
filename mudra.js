@@ -172,6 +172,37 @@ exports.authenticate = function(payload, callback) {
 	return deferred.promise;
 };
 
+exports.reset_password = function(payload, callback) {
+	var deferred = Q.defer();
+	var username = payload.username;
+	var password = payload.password;
+
+	exports.authenticate(payload).
+	then(function(payload) {
+
+		create_auth_token(username, password).then(function(hash) {
+			User.update({username: username}, {hash: hash}, function(err) {
+				if (err) {
+					return_error(err, deferred, callback);
+					return;
+				}
+
+				var payload = {status: 'success', data: 'Password reset'};
+				deferred.resolve(payload);
+				callback(payload);
+			});
+		}, function(err) {
+			return_error(err, deferred, callback);
+		});
+
+
+	}, function(payload) {
+		return_error(payload, deferred, callback);
+	});
+
+	return deferred.promise;
+};
+
 exports.create_role = function(params, callback) {
 	var deferred = Q.defer();
 

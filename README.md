@@ -57,6 +57,14 @@ mudra.authenticate(params, function(response) {
    console.log(response);
 });
 ```
+
+####Reset Password
+```javascript
+var params = {username: 'bill.gates@microsoft.com', hash: '$2a$08$4Y7NNgKwZavoT8B.xy6RyuZPXOpxsitDNjq9nSlApRFh/ZAVL3WV2', password: 'new_password'};
+mudra.reset_password(params, function(response) {
+   console.log(response);
+});
+```
 ___
 ###Authorisation
 
